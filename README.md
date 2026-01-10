@@ -22,6 +22,9 @@ A production-ready, full-stack payment gateway solution featuring a Merchant Das
 
 ---
 
+## 🏗️ System Architecture
+![Architecture Diagram](./docs/architecture-diagram.png)
+
 ## 🚀 Deployment via Docker
 
 The system is fully containerized using Docker Compose. Ensure Docker is running on your machine before starting.
