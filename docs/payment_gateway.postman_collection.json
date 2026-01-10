@@ -1,0 +1,69 @@
+{
+	"info": {
+		"name": "Payment Gateway API",
+		"description": "Collection for Merchant API testing and evaluation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "X-Api-Key", "value": "key_test_abc123" },
+							{ "key": "X-Api-Secret", "value": "secret_test_xyz789" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 10000,\n    \"currency\": \"INR\",\n    \"receipt\": \"rcpt_unique_123\"\n}"
+						},
+						"url": { "raw": "http://localhost:8000/api/v1/orders" }
+					}
+				},
+				{
+					"name": "Get Order (Public)",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "http://localhost:8000/api/v1/orders/{{order_id}}/public" }
+					}
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Process Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "X-Api-Key", "value": "key_test_abc123" },
+							{ "key": "X-Api-Secret", "value": "secret_test_xyz789" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"order_id\": \"{{order_id}}\",\n    \"method\": \"upi\",\n    \"vpa\": \"test@upi\"\n}"
+						},
+						"url": { "raw": "http://localhost:8000/api/v1/payments" }
+					}
+				},
+				{
+					"name": "Get Payment Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "X-Api-Key", "value": "key_test_abc123" },
+							{ "key": "X-Api-Secret", "value": "secret_test_xyz789" }
+						],
+						"url": { "raw": "http://localhost:8000/api/v1/payments/{{payment_id}}" }
+					}
+				}
+			]
+		}
+	]
+}
