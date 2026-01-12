@@ -21,7 +21,8 @@ services:
       - key: TEST_MODE
         value: "true"
 
-  # 2. Merchant Dashboard (Static Site)
+
+  # The Merchant Dashboard (Frontend)
   - type: web
     name: merchant-dashboard-ui
     runtime: static  # Mandatory for static sites in the new spec
