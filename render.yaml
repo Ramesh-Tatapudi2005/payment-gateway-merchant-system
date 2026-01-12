@@ -1,15 +1,15 @@
-# 1. Define the Database separately
+# 1. Top-level databases block
 databases:
-  - name: gateway_db
+  - name: gateway-db-prod
     databaseName: gateway_db
     user: admin
     plan: free
 
-# 2. Define the Services
+# 2. Top-level services block
 services:
-  # The FastAPI Backend
+  # FastAPI Backend
   - type: web
-    name: gateway_api
+    name: gateway-api-service
     env: docker
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
@@ -18,29 +18,29 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: gateway_db
+          name: gateway-db-prod
           property: connectionString
       - key: TEST_MODE
         value: "true"
 
-  # The Merchant Dashboard (Frontend)
+  # Merchant Dashboard
   - type: web
-    name: merchant_dashboard
+    name: merchant-dashboard-ui
     env: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     publishPath: build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://gateway-api.onrender.com # Update this to your backend URL
+        value: https://gateway-api-service.onrender.com
 
-  # The Hosted Checkout (Checkout Page)
+  # Hosted Checkout
   - type: web
-    name: checkout_page
+    name: checkout-page-ui
     env: static
     rootDir: checkout-page
     buildCommand: npm install && npm run build
     publishPath: build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://gateway-api.onrender.com # Update this to your backend URL
+        value: https://gateway-api-service.onrender.com
