@@ -1,13 +1,11 @@
-# 1. Top-level databases block
 databases:
   - name: gateway-db-prod
     databaseName: gateway_db
     user: admin
     plan: free
 
-# 2. Top-level services block
 services:
-  # FastAPI Backend
+  # 1. FastAPI Backend (Web Service)
   - type: web
     name: gateway-api-service
     env: docker
@@ -23,24 +21,24 @@ services:
       - key: TEST_MODE
         value: "true"
 
-  # Merchant Dashboard
+  # 2. Merchant Dashboard (Static Site)
   - type: web
     name: merchant-dashboard-ui
-    env: static
+    runtime: static  # Mandatory for static sites in the new spec
     rootDir: frontend
     buildCommand: npm install && npm run build
-    publishPath: build
+    staticPublishPath: build  # Fixes the 'publishPath not found' error
     envVars:
       - key: REACT_APP_API_URL
         value: https://gateway-api-service.onrender.com
 
-  # Hosted Checkout
+  # 3. Hosted Checkout (Static Site)
   - type: web
     name: checkout-page-ui
-    env: static
+    runtime: static  # Mandatory for static sites in the new spec
     rootDir: checkout-page
     buildCommand: npm install && npm run build
-    publishPath: build
+    staticPublishPath: build  # Fixes the 'publishPath not found' error
     envVars:
       - key: REACT_APP_API_URL
         value: https://gateway-api-service.onrender.com
