@@ -1,0 +1,41 @@
+services:
+  # 1. The PostgreSQL Database
+  - type: database
+    name: gateway_db
+    databaseName: gateway_db
+    user: admin
+
+  # 2. The FastAPI Backend
+  - type: web
+    name: gateway_api
+    env: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gateway_db
+          property: connectionString
+      - key: TEST_MODE
+        value: "true"
+
+  # 3. The Merchant Dashboard (Frontend)
+  - type: web
+    name: merchant_dashboard
+    env: static
+    buildCommand: npm install && npm run build
+    publishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://gateway_api.onrender.com # Change this after your first deploy
+
+  # 4. The Hosted Checkout (Checkout Page)
+  - type: web
+    name: checkout_page
+    env: static
+    buildCommand: npm install && npm run build
+    publishPath: ./checkout-page/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://gateway_api.onrender.com # Change this after your first deploy
