@@ -1,19 +1,26 @@
-from fastapi import FastAPI, Depends,HTTPException
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-# import datetime
 from datetime import datetime, timezone
 
 # Internal imports based on your structure
 from .database import engine, Base, SessionLocal, get_db
 from .models import Merchant
-from .routers import orders, payments
+# UPDATED: Added 'auth' to the router imports
+from .routers import orders, payments, auth 
 import sqlalchemy
+
 app = FastAPI(title="Payment Gateway API")
+
 # Initialize FastAPI app
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "https://merchant-dashboard-ui.onrender.com",
+        "https://checkout-page-ui.onrender.com"
+        ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,6 +61,8 @@ def seed_test_merchant():
         db.close()
 
 # 3. Include Routers
+# UPDATED: Added auth router so the /api/v1/auth/login path is active
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(orders.router, prefix="/api/v1/orders", tags=["Orders"])
 app.include_router(payments.router, prefix="/api/v1/payments", tags=["Payments"])
 
