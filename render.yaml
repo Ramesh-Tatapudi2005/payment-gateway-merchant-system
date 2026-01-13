@@ -1,23 +1,20 @@
+# 1. Database Definition
 databases:
   - name: gateway-db-prod
-    databaseName: gateway_db
-    user: admin
-    plan: free
-
-services:
-  # 1. FastAPI Backend (Web Service)
     databaseName: payment_gateway
     user: gateway_user
     plan: free
 
+# 2. Services Definition (Only define this header ONCE)
 services:
+  # FastAPI Backend (Web Service)
   - type: web
     name: gateway-api-service
     env: docker
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
     plan: free
-    region: ohio # Ensure this matches your database region
+    region: ohio 
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -36,25 +33,24 @@ services:
       - key: MERCHANT_API_SECRET
         value: secret_test_xyz789
 
-
-  # The Merchant Dashboard (Frontend)
+  # Merchant Dashboard (Static Site)
   - type: web
     name: merchant-dashboard-ui
-    runtime: static  # Mandatory for static sites in the new spec
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: build  # Fixes the 'publishPath not found' error
+    staticPublishPath: build
     envVars:
       - key: REACT_APP_API_URL
         value: https://gateway-api-service.onrender.com
 
-  # 3. Hosted Checkout (Static Site)
+  # Hosted Checkout (Static Site)
   - type: web
     name: checkout-page-ui
-    runtime: static  # Mandatory for static sites in the new spec
+    runtime: static
     rootDir: checkout-page
     buildCommand: npm install && npm run build
-    staticPublishPath: build  # Fixes the 'publishPath not found' error
+    staticPublishPath: build
     envVars:
       - key: REACT_APP_API_URL
         value: https://gateway-api-service.onrender.com
