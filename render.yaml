@@ -6,6 +6,7 @@ databases:
     plan: free
     region: ohio 
 
+# 2. Services Definition
 services:
   - type: web
     name: gateway-api-service
@@ -16,9 +17,9 @@ services:
     region: ohio 
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: gateway-db-prod
-          property: connectionString # This provides the reachable URL
+        # We set sync to false so you can manually paste the EXTERNAL URL
+        # into the Render Dashboard. This is the most reliable method.
+        sync: false 
       - key: PORT
         value: "8000"
       - key: TEST_MODE

@@ -5,17 +5,18 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import OperationalError
 
-# 1. Fetch the URL from environment
+# 1. Fetch URL from environment
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-# 2. Fix prefix for SQLAlchemy compatibility
+# 2. Fix prefix for SQLAlchemy 1.4+ (postgres:// -> postgresql://)
 if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
     SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# 3. Connection Retry Loop
+# 3. Connection Resilience
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
 
-for i in range(12): # Try for 60 seconds total
+# Loop to wait for the external network to stabilize
+for i in range(12): 
     try:
         with engine.connect() as connection:
             print("Successfully connected to the database!")
