@@ -9,6 +9,9 @@ SQLALCHEMY_DATABASE_URL = os.getenv(
     "postgresql://gateway_user:gateway_pass@postgres:5432/payment_gateway"
 )
 
+if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
