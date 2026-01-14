@@ -251,10 +251,8 @@ PAYMENT-GATEWAY/
 - **Unit Precision** : The transaction table displays amounts in the smallest currency unit (Paise) as required for automated testing.
 - **State Persistence** : Success and Failure pages implement the window.opener protocol to refresh the Merchant Dashboard upon completion.
 
-
 ## 🎥 Documentation Artifacts
 - **Postman Collection** : `/docs/payment_gateway.postman_collection.json`.
-
 
 ## 🧪 Automated Testing Support
 
