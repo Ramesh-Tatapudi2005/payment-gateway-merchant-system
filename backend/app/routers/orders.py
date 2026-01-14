@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from .. import models, schemas, auth, database
+
+from .. import auth
+from .. import models, schemas, database
 from ..utils.id_generator import generate_custom_id
 
 # Create the router

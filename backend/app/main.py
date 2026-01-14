@@ -3,11 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 
+from . import auth
+
 # Internal imports based on your structure
 from .database import engine, Base, SessionLocal, get_db
 from .models import Merchant
 # UPDATED: Added 'auth' to the router imports
-from .routers import orders, payments, auth 
+from .routers import orders, payments 
 import sqlalchemy
 
 app = FastAPI(title="Payment Gateway API")

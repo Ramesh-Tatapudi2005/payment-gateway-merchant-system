@@ -5,7 +5,9 @@ import time
 import os
 import random
 
-from .. import models, schemas, auth, database
+from .. import auth
+
+from .. import models, schemas, database
 from ..utils.id_generator import generate_custom_id
 from ..utils.validation import validate_vpa, validate_luhn, detect_card_network, validate_expiry
 
